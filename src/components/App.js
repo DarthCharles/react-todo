@@ -16,8 +16,10 @@ export default React.createClass({
     this.setState({ data });
   },
 
-  deleteTodo() {
-
+  removeTodo(index) {
+    const { data } = this.state;
+    data.splice(index, 1);
+    this.setState({ data });
   },
 
   render() {
@@ -28,7 +30,10 @@ export default React.createClass({
         <div className="col-md-6 jumbotron">
           <h1>Todo List 📝</h1>
           <TodoForm addTodo={ this.addNewTodo } />
-          <TodoList data={ data } />
+          <TodoList
+            data={ data }
+            removeTodo={ this.removeTodo }
+          />
         </div>
       </div>
     </div>
