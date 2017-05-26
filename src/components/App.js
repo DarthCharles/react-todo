@@ -1,41 +1,42 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
 import TodoForm from './TodoForm';
 import TodoList from './TodoList';
+import { addNewTodo, removeTodo } from  './../action-creators/todo';
 
-export default React.createClass({
-
-  getInitialState() {
-    return {
-      data: ['Lavar la ropa', 'ir a la escuela']
-    }
-  },
-
-  addNewTodo(val) {
-    const { data } = this.state;
-    data.push(val);
-    this.setState({ data });
-  },
-
-  removeTodo(index) {
-    const { data } = this.state;
-    data.splice(index, 1);
-    this.setState({ data });
-  },
+export const App = React.createClass({
 
   render() {
-    const { data } = this.state;
+    const { data, addNewTodo, removeTodo } = this.props;
 
     return <div className="container">
       <div className="row">
         <div className="col-md-6 jumbotron">
           <h1>Todo List 📝</h1>
-          <TodoForm addTodo={ this.addNewTodo } />
+          <TodoForm addTodo={ addNewTodo } />
           <TodoList
-            data={ data }
-            removeTodo={ this.removeTodo }
+            data={data}
+            removeTodo={removeTodo}
           />
         </div>
       </div>
     </div>
   }
 });
+
+function mapStateToProps(state) {
+  return {
+    data: state.todo
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    addNewTodo,
+    removeTodo
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+
